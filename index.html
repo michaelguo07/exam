@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>SDS 315 – Notes Notebook</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+      :root {
+        --bg: #f5f7fb;
+        --panel: #ffffff;
+        --border: #d5d9e6;
+        --accent: #4f46e5;
+        --accent-soft: #eef2ff;
+        --text-main: #111827;
+        --text-muted: #6b7280;
+        --text-soft: #9ca3af;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+          sans-serif;
+        background: radial-gradient(circle at top left, #e5edff, #f9fafb 50%),
+          var(--bg);
+        color: var(--text-main);
+      }
+
+      .page {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+
+      header {
+        padding: 16px 20px;
+        border-bottom: 1px solid rgba(15, 23, 42, 0.06);
+        backdrop-filter: blur(10px);
+        background: rgba(248, 250, 252, 0.85);
+        position: sticky;
+        top: 0;
+        z-index: 10;
+      }
+
+      .header-inner {
+        max-width: 1080px;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+      }
+
+      .title-block h1 {
+        margin: 0;
+        font-size: 1.4rem;
+        letter-spacing: -0.02em;
+      }
+
+      .title-block p {
+        margin: 2px 0 0;
+        font-size: 0.8rem;
+        color: var(--text-muted);
+      }
+
+      .tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 10px;
+        border-radius: 999px;
+        border: 1px solid rgba(79, 70, 229, 0.18);
+        background: rgba(238, 242, 255, 0.9);
+        font-size: 0.7rem;
+        font-weight: 500;
+        color: #312e81;
+      }
+
+      .tag span {
+        font-size: 0.75rem;
+      }
+
+      main {
+        flex: 1;
+        padding: 18px 16px 32px;
+      }
+
+      .layout {
+        max-width: 1080px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: minmax(0, 1.2fr) minmax(0, 2fr);
+        gap: 20px;
+      }
+
+      @media (max-width: 900px) {
+        .layout {
+          grid-template-columns: minmax(0, 1fr);
+        }
+      }
+
+      .panel {
+        background: var(--panel);
+        border-radius: 18px;
+        border: 1px solid var(--border);
+        box-shadow: 0 18px 45px rgba(15, 23, 42, 0.04);
+        padding: 16px 18px 18px;
+      }
+
+      .panel + .panel {
+        margin-top: 14px;
+      }
+
+      .panel-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        margin-bottom: 10px;
+      }
+
+      .panel-title {
+        font-size: 0.9rem;
+        font-weight: 600;
+        letter-spacing: 0.02em;
+        text-transform: uppercase;
+        color: #4b5563;
+      }
+
+      .panel-sub {
+        font-size: 0.75rem;
+        color: var(--text-soft);
+      }
+
+      .chip-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-bottom: 6px;
+      }
+
+      .chip {
+        font-size: 0.7rem;
+        padding: 4px 7px;
+        border-radius: 999px;
+        background: #f3f4ff;
+        color: #3730a3;
+        border: 1px solid rgba(79, 70, 229, 0.15);
+      }
+
+      .section-list {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .item-card {
+        padding: 9px 10px;
+        border-radius: 12px;
+        border: 1px solid rgba(148, 163, 184, 0.45);
+        background: linear-gradient(
+          135deg,
+          rgba(248, 250, 252, 0.96),
+          rgba(249, 250, 251, 0.96)
+        );
+      }
+
+      .item-header {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 10px;
+      }
+
+      .item-title {
+        font-size: 0.85rem;
+        font-weight: 600;
+      }
+
+      .item-meta {
+        font-size: 0.7rem;
+        color: var(--text-soft);
+        white-space: nowrap;
+      }
+
+      .item-body {
+        margin-top: 4px;
+        font-size: 0.78rem;
+        color: var(--text-muted);
+      }
+
+      .item-tags {
+        margin-top: 4px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px;
+      }
+
+      .pill {
+        font-size: 0.68rem;
+        padding: 3px 6px;
+        border-radius: 999px;
+        background: #eff6ff;
+        color: #1d4ed8;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+      }
+
+      @media (max-width: 700px) {
+        .grid {
+          grid-template-columns: minmax(0, 1fr);
+        }
+      }
+
+      .concept-chip {
+        padding: 7px 9px;
+        border-radius: 11px;
+        background: #f8fafc;
+        border: 1px dashed rgba(148, 163, 184, 0.7);
+        font-size: 0.76rem;
+        color: #374151;
+      }
+
+      .concept-chip strong {
+        font-weight: 600;
+      }
+
+      .vocab-search {
+        min-width: 0;
+      }
+
+      .vocab-search input {
+        width: 180px;
+        max-width: 100%;
+        padding: 5px 9px;
+        border-radius: 999px;
+        border: 1px solid rgba(148, 163, 184, 0.8);
+        font-size: 0.75rem;
+        color: #374151;
+        outline: none;
+      }
+
+      .vocab-search input::placeholder {
+        color: var(--text-soft);
+      }
+
+      .vocab-search input:focus {
+        border-color: var(--accent);
+        box-shadow: 0 0 0 1px rgba(79, 70, 229, 0.5);
+      }
+
+      .code-block {
+        margin-top: 6px;
+        padding: 7px 9px;
+        border-radius: 10px;
+        background: #020617;
+        color: #e5e7eb;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+          "Liberation Mono", "Courier New", monospace;
+        font-size: 0.72rem;
+        overflow-x: auto;
+        white-space: pre;
+      }
+
+      .note {
+        margin-top: 6px;
+        font-size: 0.72rem;
+        color: var(--text-soft);
+      }
+
+      .footer {
+        max-width: 1080px;
+        margin: 0 auto;
+        padding: 8px 2px 0;
+        font-size: 0.7rem;
+        color: var(--text-soft);
+        text-align: right;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <header>
+        <div class="header-inner">
+          <div class="title-block">
+            <h1>SDS 315 – Exam 1 Notes Notebook</h1>
+            <p>
+              Pulled together from your uploaded lectures, R scripts, and
+              homework (.Rmd) files in this folder.
+            </p>
+          </div>
+          <div class="tag">
+            <span>📚</span>
+            <span>Static study site – open this file in your browser</span>
+          </div>
+        </div>
+      </header>
+
+      <main>
+        <div class="layout">
+          <!-- LEFT COLUMN: Course map & files -->
+          <section>
+            <div class="panel">
+              <div class="panel-header">
+                <div>
+                  <div class="panel-title">Course map</div>
+                  <div class="panel-sub">
+                    High‑level structure of your SDS 315 materials.
+                  </div>
+                </div>
+              </div>
+
+              <div class="chip-row">
+                <span class="chip">Lectures: 01–13 PDFs</span>
+                <span class="chip">Homework: 3 R Markdown files</span>
+                <span class="chip">Practice code: R scripts & data</span>
+              </div>
+
+              <div class="section-list">
+                <div class="item-card">
+                  <div class="item-header">
+                    <div class="item-title">Lectures 01–07</div>
+                    <div class="item-meta">`01_...pdf` – `07_...pdf`</div>
+                  </div>
+                  <div class="item-body">
+                    Foundations: course overview, basic study designs, sample
+                    surveys vs censuses, experiments vs observational studies,
+                    and different ways to get data (simple random samples,
+                    quasi‑experiments, observational pipelines).
+                  </div>
+                  <div class="item-tags">
+                    <span class="pill">sampling vs census</span>
+                    <span class="pill">experiments & confounding</span>
+                    <span class="pill">observational studies</span>
+                  </div>
+                </div>
+
+                <div class="item-card">
+                  <div class="item-header">
+                    <div class="item-title">Lectures 08–13</div>
+                    <div class="item-meta">`08_...pdf` – `13_...pdf`</div>
+                  </div>
+                  <div class="item-body">
+                    Statistical uncertainty, bootstrapping, p‑values and
+                    hypothesis testing, goodness‑of‑fit, and connecting sampling
+                    variation to inference.
+                  </div>
+                  <div class="item-tags">
+                    <span class="pill">bootstrap</span>
+                    <span class="pill">sampling distributions</span>
+                    <span class="pill">p‑values & inference</span>
+                  </div>
+                </div>
+
+                <div class="item-card">
+                  <div class="item-header">
+                    <div class="item-title">
+                      Homework 1 – ChickWeight & experimental thinking
+                    </div>
+                    <div class="item-meta">`sds315_hw1.rmd`</div>
+                  </div>
+                  <div class="item-body">
+                    Uses the built‑in <code>ChickWeight</code> data to practice
+                    codebooks, variable types, census vs sample, longitudinal vs
+                    cross‑sectional plots, and communicating results to a
+                    general audience. Also includes thought experiments on yoga
+                    and stress (design vs confounding).
+                  </div>
+                  <div class="item-tags">
+                    <span class="pill">codebooks</span>
+                    <span class="pill">ChickWeight</span>
+                    <span class="pill">longitudinal vs cross‑sectional</span>
+                  </div>
+                </div>
+
+                <div class="item-card">
+                  <div class="item-header">
+                    <div class="item-title">
+                      Homework 2 – Sampling, natural experiments, DiD, RDD
+                    </div>
+                    <div class="item-meta">`sds315hw2_updated.Rmd`</div>
+                  </div>
+                  <div class="item-body">
+                    Generates valid US phone numbers under constraints, then
+                    explores Cuban migration (Mariel Boatlift) as a natural
+                    experiment. Discusses Difference‑in‑Differences, Regression
+                    Discontinuity, and when a before/after comparison fails to
+                    be causal.
+                  </div>
+                  <div class="item-tags">
+                    <span class="pill">sampling constraints</span>
+                    <span class="pill">natural experiments</span>
+                    <span class="pill">DiD & RDD</span>
+                  </div>
+                </div>
+
+                <div class="item-card">
+                  <div class="item-header">
+                    <div class="item-title">
+                      Homework 3 – Cohorts & uncertainty
+                    </div>
+                    <div class="item-meta">`sds315hw3-2.Rmd`</div>
+                  </div>
+                  <div class="item-body">
+                    Designs cohort studies (diabetes, NBA draft, endangered
+                    toads), then simulates normal data to study sampling
+                    distributions, the Law of Large Numbers, the Central Limit
+                    Theorem, and the bootstrap.
+                  </div>
+                  <div class="item-tags">
+                    <span class="pill">cohort design</span>
+                    <span class="pill">LLN & CLT</span>
+                    <span class="pill">bootstrap SE</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="panel">
+              <div class="panel-header">
+                <div>
+                  <div class="panel-title">Representative code snippets</div>
+                  <div class="panel-sub">
+                    Pulled from your R scripts / R Markdown files.
+                  </div>
+                </div>
+              </div>
+
+              <div class="section-list">
+                <div class="item-card">
+                  <div class="item-header">
+                    <div class="item-title">
+                      Longitudinal growth in <code>ChickWeight</code>
+                    </div>
+                    <div class="item-meta">from `sds315_hw1.rmd`</div>
+                  </div>
+                  <div class="item-body">
+                    Plotting each chick across time to show longitudinal
+                    trajectories and motivate the idea that growth depends on
+                    both time and diet.
+                  </div>
+                  <div class="code-block">
+ggplot(data = ChickWeight,
+       aes(x = Time, y = weight, group = Chick)) +
+  geom_line() +
+  labs(
+    title = "Progression of weight over time for 50 chicks.",
+    x = "Time (days)",
+    y = "Weight (grams)"
+  )
+                  </div>
+                  <p class="note">
+                    Key ideas: longitudinal vs cross‑sectional, units of
+                    analysis (chick at a given time), and interpreting patterns
+                    in plots for a non‑technical audience.
+                  </p>
+                </div>
+
+                <div class="item-card">
+                  <div class="item-header">
+                    <div class="item-title">
+                      Constrained sampling of phone numbers
+                    </div>
+                    <div class="item-meta">
+                      from `sds315hw2_updated.Rmd` – Question 1
+                    </div>
+                  </div>
+                  <div class="item-body">
+                    Building valid US phone numbers (<code>XXX-XXX-XXXX</code>)
+                    under multiple constraints using loops and
+                    <code>sample()</code>.
+                  </div>
+                  <div class="code-block">
+random_phone_numbers &lt;- character(10)
+
+for (i in 1:10) {
+  first  &lt;- sample(2:9, 1)       # 1st digit: 2–9
+  fourth &lt;- sample(2:9, 1)       # 4th digit: 2–9
+
+  # 2nd digit: cannot be 9
+  second &lt;- sample(0:8, 1)
+
+  # 3rd digit: cannot be 1 if 2nd is 1
+  if (second == 1) {
+    third &lt;- sample(c(0, 2:9), 1)
+  } else {
+    third &lt;- sample(0:9, 1)
+  }
+
+  random_phone_numbers[i] &lt;- paste0(
+    first, second, third, "-",
+    fourth, sample(0:9, 1), sample(0:9, 1), "-",
+    sample(0:9, 1), sample(0:9, 1),
+    sample(0:9, 1), sample(0:9, 1)
+  )
+}
+print(random_phone_numbers)
+                  </div>
+                  <p class="note">
+                    Key idea: translating verbal constraints on a sampling
+                    process into reproducible code.
+                  </p>
+                </div>
+
+                <div class="item-card">
+                  <div class="item-header">
+                    <div class="item-title">
+                      Simulating sampling distributions &amp; LLN
+                    </div>
+                    <div class="item-meta">from `sds315hw3-2.Rmd`</div>
+                  </div>
+                  <div class="item-body">
+                    Repeatedly sampling from a Normal distribution to see how
+                    the sample mean behaves and how variability shrinks.
+                  </div>
+                  <div class="code-block">
+N &lt;- 100
+M &lt;- 1000
+true_mu &lt;- 5
+
+simulations &lt;- do(M) * {
+  estimator &lt;- mean(rnorm(N, true_mu, 10))
+  estimator
+}
+
+ggplot(simulations) +
+  geom_histogram(aes(x = result), bins = 30) +
+  geom_vline(xintercept = true_mu, colour = "red")
+                  </div>
+                  <p class="note">
+                    Key ideas: Law of Large Numbers, Central Limit Theorem,
+                    interpreting sampling distributions, and reading histograms
+                    with reference lines.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- RIGHT COLUMN: Concept cheat sheet -->
+          <section>
+            <div class="panel">
+              <div class="panel-header">
+                <div>
+                  <div class="panel-title">Concept cheat‑sheet</div>
+                  <div class="panel-sub">
+                    Condensed concepts that recur in your homeworks and
+                    lectures.
+                  </div>
+                </div>
+                <div class="vocab-search">
+                  <input
+                    id="vocabSearch"
+                    type="text"
+                    placeholder="Filter terms (e.g. DiD, bootstrap)"
+                  />
+                </div>
+              </div>
+
+              <div class="grid" id="vocabGrid">
+                <div class="concept-chip">
+                  <strong>Sample vs census</strong><br />
+                  A census measures every unit in the population; a sample
+                  measures a subset. Your homework emphasizes pros/cons:
+                  censuses are complete but expensive, samples are cheaper but
+                  require careful design.
+                </div>
+                <div class="concept-chip">
+                  <strong>Units &amp; variables</strong><br />
+                  Each row represents a unit (e.g., chick at a time point). You
+                  classify variables as numerical vs categorical, discrete vs
+                  continuous, nominal vs ordinal.
+                </div>
+                <div class="concept-chip">
+                  <strong>Cross‑sectional vs longitudinal</strong><br />
+                  Cross‑sectional: different units at a single time. Longitudinal:
+                  follow the same units over time (e.g., repeated measurements
+                  on the same chicks).
+                </div>
+                <div class="concept-chip">
+                  <strong>Experiments vs observational studies</strong><br />
+                  Experiments involve random assignment to treatment; they let
+                  you make causal claims when well‑designed. Observational
+                  studies observe what already happens and rely on design
+                  tricks: matching, blocking, DiD, RDD, etc.
+                </div>
+                <div class="concept-chip">
+                  <strong>Confounding</strong><br />
+                  A confounder influences both treatment and outcome (e.g.,
+                  health consciousness in yoga vs stress). Good designs try to
+                  block, match, or randomize to mitigate confounding.
+                </div>
+                <div class="concept-chip">
+                  <strong>Natural experiments</strong><br />
+                  Events like the Mariel Boatlift act as "as‑if random" shocks.
+                  You compare treated vs similar control cities to estimate
+                  causal effects when you can’t randomize.
+                </div>
+                <div class="concept-chip">
+                  <strong>Difference‑in‑Differences (DiD)</strong><br />
+                  Compare changes over time between treated vs control groups.
+                  Critical assumption: <em>parallel trends</em> – absent
+                  treatment, both groups would have moved similarly.
+                </div>
+                <div class="concept-chip">
+                  <strong>Regression Discontinuity (RDD)</strong><br />
+                  Treatment is assigned by a cutoff on a running variable
+                  (e.g., salary threshold). Assumes individuals can’t precisely
+                  manipulate their position near the cutoff.
+                </div>
+                <div class="concept-chip">
+                  <strong>Cohorts</strong><br />
+                  Groups defined by a shared starting condition (e.g.,
+                  disease‑free 20–30 year‑olds). You follow them over time to
+                  relate exposures to incidence.
+                </div>
+                <div class="concept-chip">
+                  <strong>Law of Large Numbers (LLN)</strong><br />
+                  As sample size grows, sample averages tend to stabilize near
+                  the true mean; your simulations with increasing
+                  <code>N</code> illustrate this.
+                </div>
+                <div class="concept-chip">
+                  <strong>Sampling distribution</strong><br />
+                  The distribution of an estimator (e.g., sample mean) over
+                  repeated samples. You built this by Monte Carlo simulation
+                  and saw it looks approximately Normal for large N.
+                </div>
+                <div class="concept-chip">
+                  <strong>Bootstrap</strong><br />
+                  Resample with replacement from a single "true" sample to
+                  approximate the sampling distribution of an estimator and
+                  obtain standard errors and confidence intervals.
+                </div>
+                <div class="concept-chip">
+                  <strong>Population vs sample</strong><br />
+                  The population is the full group you care about (e.g. all
+                  Texas chicken farmers); a sample is the subset you actually
+                  observe. Parameters describe populations, statistics describe
+                  samples.
+                </div>
+                <div class="concept-chip">
+                  <strong>Parameter vs statistic</strong><br />
+                  A parameter is a fixed (usually unknown) number that
+                  summarizes a population (e.g. true mean weight); a statistic
+                  is a number computed from data (e.g. sample mean) that we use
+                  to estimate the parameter.
+                </div>
+                <div class="concept-chip">
+                  <strong>Codebook</strong><br />
+                  A small table that lists each variable, its units, and a clear
+                  description. Your Homework 1 ChickWeight codebook is a good
+                  example: it forces you to think about what each column means
+                  before analyzing.
+                </div>
+                <div class="concept-chip">
+                  <strong>Descriptive vs analytical studies</strong><br />
+                  Descriptive: summarize what a group looks like (e.g. average
+                  tip). Analytical: compare groups or relate variables (e.g. do
+                  coffee drinkers sleep less?) to answer "why" questions.
+                </div>
+                <div class="concept-chip">
+                  <strong>Prospective vs retrospective</strong><br />
+                  Prospective: follow a cohort forward in time, recording
+                  exposures and outcomes as they happen. Retrospective: look
+                  back using existing records (e.g. past medical charts).
+                </div>
+                <div class="concept-chip">
+                  <strong>Blocking vs matching</strong><br />
+                  Blocking is done <em>before</em> treatment assignment in an
+                  experiment (design phase) to balance key variables across
+                  groups. Matching is done <em>after</em> assignment (analysis
+                  phase) to pair treated and control units with similar
+                  characteristics.
+                </div>
+                <div class="concept-chip">
+                  <strong>Null vs alternative hypothesis</strong><br />
+                  The null hypothesis (<code>H₀</code>) is the "no effect" or
+                  "no difference" story; the alternative (<code>H₁</code>) is
+                  what you’re trying to find evidence for (e.g. yoga reduces
+                  stress).
+                </div>
+                <div class="concept-chip">
+                  <strong>p‑value</strong><br />
+                  The probability, assuming the null hypothesis is true, of
+                  getting a result as extreme or more extreme than what you
+                  observed. Small p‑values suggest the data would be surprising
+                  if the null were really true.
+                </div>
+                <div class="concept-chip">
+                  <strong>Standard error (SE)</strong><br />
+                  The typical amount an estimator (like a sample mean) would
+                  vary from sample to sample. You estimated this both from
+                  formulas and via bootstrap in Homework 3.
+                </div>
+                <div class="concept-chip">
+                  <strong>Confidence interval</strong><br />
+                  An interval built from data (e.g. estimate ± margin of error)
+                  designed so that a chosen percentage (often 95%) of such
+                  intervals would capture the true parameter in repeated
+                  sampling.
+                </div>
+                <div class="concept-chip">
+                  <strong>Type I vs Type II error</strong><br />
+                  Type I: rejecting a true null (false positive). Type II:
+                  failing to reject a false null (false negative). Significance
+                  level controls Type I error; power is 1 − (Type II error).
+                </div>
+              </div>
+            </div>
+
+            <div class="panel">
+              <div class="panel-header">
+                <div>
+                  <div class="panel-title">How to use this page</div>
+                  <div class="panel-sub">
+                    Quick guidance for exam review.
+                  </div>
+                </div>
+              </div>
+
+              <div class="section-list">
+                <div class="item-card">
+                  <div class="item-header">
+                    <div class="item-title">1. Start with the course map</div>
+                  </div>
+                  <div class="item-body">
+                    Use the top panel on the left to remind yourself which PDF
+                    lectures and homework files correspond to which concepts.
+                    This is essentially a human‑readable index of the folder
+                    you’re working in.
+                  </div>
+                </div>
+
+                <div class="item-card">
+                  <div class="item-header">
+                    <div class="item-title">
+                      2. Re‑run R code in RStudio / Posit
+                    </div>
+                  </div>
+                  <div class="item-body">
+                    When you see a snippet you want to internalize, open the
+                    associated <code>.R</code> or <code>.Rmd</code> file from
+                    this folder in RStudio, run the chunks, and experiment by
+                    changing parameters (e.g., sample size, distribution,
+                    constraints).
+                  </div>
+                </div>
+
+                <div class="item-card">
+                  <div class="item-header">
+                    <div class="item-title">3. Drill concepts with prompts</div>
+                  </div>
+                  <div class="item-body">
+                    Use the right‑hand cheat‑sheet as a checklist. For each
+                    entry, try to:
+                    <ul style="margin: 6px 0 0 16px; padding: 0; font-size: 0.78rem;">
+                      <li>Give your own definition in 1–2 sentences.</li>
+                      <li>
+                        Give 1 example from your homeworks or lectures where it
+                        appears.
+                      </li>
+                      <li>
+                        State the main assumption needed for the method to work.
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+
+                <div class="item-card">
+                  <div class="item-header">
+                    <div class="item-title">4. Link back to original files</div>
+                  </div>
+                  <div class="item-body">
+                    This page does not move or modify your files – it just
+                    summarizes them. When a title references a filename (for
+                    example, <code>sds315hw2_updated.Rmd</code>), look for that
+                    exact file in this folder to see the full details,
+                    questions, and answers.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <div class="footer">
+          This HTML file is self‑contained: you can rename it or move it with
+          the rest of your notes and open it directly in any modern browser.
+        </div>
+      </main>
+    </div>
+    <script>
+      (function () {
+        const input = document.getElementById("vocabSearch");
+        const chips = Array.from(
+          document.querySelectorAll("#vocabGrid .concept-chip")
+        );
+        if (!input || !chips.length) return;
+
+        input.addEventListener("input", () => {
+          const q = input.value.trim().toLowerCase();
+          chips.forEach((chip) => {
+            const text = chip.textContent || "";
+            const match = !q || text.toLowerCase().includes(q);
+            (chip as HTMLElement).style.display = match ? "block" : "none";
+          });
+        });
+      })();
+    </script>
+  </body>
+</html>
+
